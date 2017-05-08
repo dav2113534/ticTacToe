@@ -22,8 +22,13 @@ function recMove(state) {
     } else {
         state.currentPlayer = "O";
     }
+    //TODO: record O or X in the grid for current player
     return state;
 }
+//TODO: function to check for 
+// row - line of the same
+// columm
+// diagonal
 
 
 /* TESTS */
@@ -35,6 +40,24 @@ function testRecPlayerSwitch() {
 
     testState = recMove(testState);
     assertEqual(testState.currentPlayer, "X");
+}
+
+function testHasWon() {
+    var testState = {
+        grid: [
+            ["X", "X", "X"],
+            [-1, -1, -1],
+            [-1, -1, -1]
+        ]
+    };
+    var won = hasWon(testState);
+    assertEqual(won.status, true);
+
+    testState.grid[0] = [-1, -1, -1];
+    testState.grid[1] = ["O", "O", "O"];
+    won = hasWon(testState)
+    assertEqual(won.status, true);
+
 }
 
 function testRecMoveSaving() {
