@@ -1,8 +1,8 @@
 /* 
 this will keep each player's score
 */
-var player1 = 0;
-var player2 = 0;
+var player1 = 'X';
+var player2 = 'O';
 
 
 function start(state) {
@@ -10,7 +10,7 @@ function start(state) {
     state.grid = [
         [-1, -1, -1],
         [-1, -1, -1],
-        [-1, -1, -1]
+        [-1, -1, -1],
     ];
     return state;
 
@@ -30,6 +30,23 @@ function recMove(state) {
 // columm
 // diagonal
 
+function hasWon(state){
+    var won = [
+        /* Horizontal */ 
+        [0,1,2],
+        [3,4,5],
+        [6,7,8],
+        /* Vertical */ 
+        [0,3,6],
+        [1,4,7],
+        [2,5,8],
+        /* Diagonally */ 
+        [0,4,8],
+        [2,4,6]
+    ]
+    
+}
+
 
 /* TESTS */
 /*** Test Helpers ***/
@@ -47,8 +64,11 @@ function testHasWon() {
         grid: [
             ["X", "X", "X"],
             [-1, -1, -1],
-            [-1, -1, -1]
+            [-1, -1, -1],
+            {
+            }
         ]
+        
     };
     var won = hasWon(testState);
     assertEqual(won.status, true);
