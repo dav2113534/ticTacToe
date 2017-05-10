@@ -30,21 +30,21 @@ function recMove(state) {
 // columm
 // diagonal
 
-function hasWon(state){
+function hasWon(state) {
     var won = [
-        /* Horizontal */ 
-        [0,1,2],
-        [3,4,5],
-        [6,7,8],
-        /* Vertical */ 
-        [0,3,6],
-        [1,4,7],
-        [2,5,8],
-        /* Diagonally */ 
-        [0,4,8],
-        [2,4,6]
+        /* Horizontal */
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        /* Vertical */
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        /* Diagonally */
+        [0, 4, 8],
+        [2, 4, 6]
     ]
-    
+
 }
 
 
@@ -65,10 +65,9 @@ function testHasWon() {
             ["X", "X", "X"],
             [-1, -1, -1],
             [-1, -1, -1],
-            {
-            }
+            {}
         ]
-        
+
     };
     var won = hasWon(testState);
     assertEqual(won.status, true);
