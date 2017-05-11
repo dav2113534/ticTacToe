@@ -4,6 +4,7 @@ this will keep each player's score
 var player1 = 'X';
 var player2 = 'O';
 
+var state = {}
 
 function start(state) {
     state.currentPlayer = 'X';
@@ -44,9 +45,34 @@ function hasWon(state) {
         [0, 4, 8],
         [2, 4, 6]
     ]
+    if (state.currentPlayer === won) {
+        alert(state.currentPlayer + " Has Won!")
+    } else {
+        alert("We Have a Draw")
+    }
 
 }
 
+function render(state) {
+    $(".board").html(state.grid.map(renderRow).join(""));
+}
+
+function renderCell(parentIndex, cell, index) {
+    return '<td id=' + parentIndex + '-' + index + ' class="tile"></td>'
+}
+
+function renderCellForRow(parentIndex) {
+    return function (cell, index) {
+        return renderCell(parentIndex, cell, index);
+    }
+}
+
+function renderRow(row, index) {
+    return "<tr>" + row.map(renderCellForRow(index)).join("") + "</tr>"
+}
+
+start(this.state);
+render(this.state);
 
 /* TESTS */
 /*** Test Helpers ***/
@@ -65,7 +91,9 @@ function testHasWon() {
             ["X", "X", "X"],
             [-1, -1, -1],
             [-1, -1, -1],
-            {}
+            {
+                currentPlayer: ""
+            }
         ]
 
     };
