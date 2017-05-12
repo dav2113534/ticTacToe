@@ -23,13 +23,10 @@ function recMove(state) {
     } else {
         state.currentPlayer = "O";
     }
-    //TODO: record O or X in the grid for current player
+    
     return state;
 }
-//TODO: function to check for 
-// row - line of the same
-// columm
-// diagonal
+
 
 function hasWon(state) {
     var won = [
@@ -45,7 +42,7 @@ function hasWon(state) {
         [0, 4, 8],
         [2, 4, 6]
     ]
-    if (state.currentPlayer === won) {
+    if (state.grid === won) {
         alert(state.currentPlayer + " Has Won!")
     } else {
         alert("We Have a Draw")
@@ -53,8 +50,17 @@ function hasWon(state) {
 
 }
 
+
+
 function render(state) {
-    $(".board").html(state.grid.map(renderRow).join(""));
+    if (state.grid) {
+        $(".board").html(state.grid.map(renderRow).join(""));
+        $('.tile').click(handleTileClick);
+        $('.currentPlayer').html(renderPlayer(state.currentPlayer));
+    }
+
+    $(".startButton").click(handleStart);
+
 }
 
 function renderCell(parentIndex, cell, index) {
@@ -71,7 +77,21 @@ function renderRow(row, index) {
     return "<tr>" + row.map(renderCellForRow(index)).join("") + "</tr>"
 }
 
-start(this.state);
+function renderPlayer(player) {
+    return "Current player is " + player;
+}
+
+function handleStart(e) {
+    start(state);
+    render(state);
+}
+
+function handleTileClick(e) {
+    recMove(state);
+    render(state);
+}
+
+//start(this.state);
 render(this.state);
 
 /* TESTS */
