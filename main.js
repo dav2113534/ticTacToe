@@ -11,7 +11,7 @@ function start(state) {
     state.grid = [
         [-1, -1, -1],
         [-1, -1, -1],
-        [-1, -1, -1],
+        [-1, -1, -1]
     ];
     return state;
 
@@ -23,7 +23,7 @@ function recMove(state) {
     } else {
         state.currentPlayer = "O";
     }
-    
+
     return state;
 }
 
@@ -49,6 +49,17 @@ function hasWon(state) {
     }
 
 }
+
+//Saves player1 position 
+function savePlayer1Pos(state){
+    var player1Pos=[];
+    for(var i = 0; i < state.grid.length; i++)
+    if(player1 === state.grid[i]){
+        player1Pos.push(i);
+    }
+return player1Pos;
+}
+
 
 
 
