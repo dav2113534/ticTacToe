@@ -17,15 +17,28 @@ function start(state) {
 
 }
 
-function recMove(state) {
+function recMove(state, row, column) {
+    state.grid[row][column] = state.currentPlayer;
     if (state.currentPlayer === "O") {
         state.currentPlayer = "X";
+       
+
     } else {
         state.currentPlayer = "O";
     }
 
     return state;
 }
+
+
+function displayPlayer(){
+    for(var i = 0; i < state.grid.length; i++);
+    if(state.grid[i][i] === state.currentPlayer){
+        $('.tile').text(state.currentPlayer); 
+    } else( console.log("do nothing"))
+}
+
+
 
 
 function hasWon(state) {
@@ -50,15 +63,6 @@ function hasWon(state) {
 
 }
 
-//Saves player1 position 
-function savePlayer1Pos(state){
-    var player1Pos=[];
-    for(var i = 0; i < state.grid.length; i++)
-    if(player1 === state.grid[i]){
-        player1Pos.push(i);
-    }
-return player1Pos;
-}
 
 
 
@@ -67,7 +71,11 @@ function render(state) {
     if (state.grid) {
         $(".board").html(state.grid.map(renderRow).join(""));
         $('.tile').click(handleTileClick);
+        $('.tile').html(state.currentPlayer); 
         $('.currentPlayer').html(renderPlayer(state.currentPlayer));
+        // $('tile').text(state.currentPlayer);
+
+
     }
 
     $(".startButton").click(handleStart);
@@ -98,7 +106,10 @@ function handleStart(e) {
 }
 
 function handleTileClick(e) {
-    recMove(state);
+    var split = e.target.id.split('-').map(function (a) {
+        return parseInt(a);
+    })
+    recMove(state, split[0], split[1]);
     render(state);
 }
 
@@ -109,10 +120,10 @@ render(this.state);
 /*** Test Helpers ***/
 function testRecPlayerSwitch() {
     var testState = start({})
-    testState = recMove(testState);
+    testState = recMove(testState, 0, 0);
     assertEqual(testState.currentPlayer, "O");
 
-    testState = recMove(testState);
+    testState = recMove(testState, 0, 0);
     assertEqual(testState.currentPlayer, "X");
 }
 
@@ -139,7 +150,12 @@ function testHasWon() {
 }
 
 function testRecMoveSaving() {
-    var testState = start({})
+    var testState = start({});
+    var currentPlayer = testState.currentPlayer;
+
+    recMove(testState, 0, 0);
+
+    assertEqual(testState.grid[0][0], currentPlayer);
 }
 
 function testStart() {
@@ -153,6 +169,8 @@ function testStart() {
 function test() {
     testStart();
     testRecPlayerSwitch();
+    testRecMoveSaving();
+    // testHasWon(); 
 }
 
 function assertEqual(actual, expected, message) {
