@@ -5,13 +5,14 @@ var playerX = 'X';
 var playerO = 'O';
 
 var state = {}
+var initialCellValue = undefined;
 
 function start(state) {
     state.currentPlayer = playerX;
     state.grid = [
-        [-1, -1, -1],
-        [-1, -1, -1],
-        [-1, -1, -1]
+        [initialCellValue, initialCellValue, initialCellValue],
+        [initialCellValue, initialCellValue, initialCellValue],
+        [initialCellValue, initialCellValue, initialCellValue]
     ];
     return state;
 
@@ -21,9 +22,6 @@ function recMove(state, row, column) {
     state.grid[row][column] = state.currentPlayer;
     if (state.currentPlayer === playerO) {
         state.currentPlayer = playerX;
-
-
-
     } else {
         state.currentPlayer = playerO;
     }
@@ -36,7 +34,7 @@ function displayPlayer(state) {
     for (var i = 0; i > state.grid.length; i++);
     if (state.grid[i][i] === playerX) {
         $('.tile').text(playerX);
-    } else(console.log("do nothing"))
+    } else (console.log("do nothing"))
 }
 
 
@@ -44,25 +42,28 @@ function displayPlayer(state) {
 
 
 function hasWon(state) {
-    var won = [
-        /* Horizontal */
-        [0 - 0, 0 - 1, 0 - 2],
-        [1 - 0, 1 - 1, 1 - 2],
-        [2 - 0, 2 - 1, 2 - 2],
-        /* Vertical */
-        [0 - 0, 1 - 0, 2 - 0],
-        [0 - 1, 1 - 1, 2 - 1],
-        [0 - 2, 1 - 2, 2 - 2],
-        /* Diagonally */
-        [0 - 0, 1 - 1, 2 - 2],
-        [0 - 2, 1 - 1, 2 - 0]
-    ]
-    if (state.grid === won) {
-        alert(state.currentPlayer + " Has Won!")
-    } else {
-        alert("We Have a Draw")
+    var status = false;
+    var player = undefined;
+    var wonIndex = [];
+    state.grid.forEach(function (row, rowIndex) {
+        var firstCell = row[0];
+        if (firstCell !== initialCellValue) {
+            var rowExludingFirst = row.slice(1);
+            var rowWin = rowExludingFirst.every(function (e) { return e === firstCell });
+            if (rowWin) {
+                status = true;
+                player = firstCell;
+                row.forEach(function (cell, cellIndex) {
+                    wonIndex.push([rowIndex, cellIndex])
+                })
+            }
+        }
+    })
+    return {
+        status: status,
+        player: player,
+        wonIndex: wonIndex
     }
-
 }
 
 
@@ -84,7 +85,16 @@ function render(state) {
 }
 
 function renderCell(parentIndex, cell, index) {
-    return '<td id=' + parentIndex + '-' + index + ' class="tile"></td>'
+    if (cell === initialCellValue) cell = "";
+    var wonClass = "";
+    var won = hasWon(state).wonIndex.find(function (wi) {
+        return wi[0] === parentIndex && wi[1] === index
+    })
+    if (won !== undefined) {
+        wonClass = "won";
+
+    }
+    return '<td id=' + parentIndex + '-' + index + ' class="tile ' + wonClass + '">' + cell + '</td>'
 }
 
 function renderCellForRow(parentIndex) {
@@ -133,22 +143,25 @@ function testHasWon() {
     var testState = {
         grid: [
             ["X", "X", "X"],
-            [-1, -1, -1],
-            [-1, -1, -1],
-            {
-                currentPlayer: ""
-            }
+            [initialCellValue, initialCellValue, initialCellValue],
+            [initialCellValue, initialCellValue, initialCellValue],
         ]
 
     };
     var won = hasWon(testState);
     assertEqual(won.status, true);
+    assertEqual(won.player, "X");
+    assertEqual(won.wonIndex.length, 3);
+    assertEqual(won.wonIndex[0][0], 0);
 
-    testState.grid[0] = [-1, -1, -1];
+    testState.grid[0] = [initialCellValue, initialCellValue, initialCellValue];
     testState.grid[1] = ["O", "O", "O"];
+
     won = hasWon(testState)
     assertEqual(won.status, true);
-
+    assertEqual(won.player, "O");
+    assertEqual(won.wonIndex.length, 3);
+    assertEqual(won.wonIndex[0][0], 1);
 }
 
 function testRecMoveSaving() {
@@ -172,7 +185,7 @@ function test() {
     testStart();
     testRecPlayerSwitch();
     testRecMoveSaving();
-    // testHasWon(); 
+    testHasWon();
 }
 
 function assertEqual(actual, expected, message) {
