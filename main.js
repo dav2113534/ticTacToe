@@ -5,13 +5,14 @@ var playerX = 'X';
 var playerO = 'O';
 
 var state = {}
+var initialCellValue = undefined;
 
 function start(state) {
     state.currentPlayer = playerX;
     state.grid = [
-        [-1, -1, -1],
-        [-1, -1, -1],
-        [-1, -1, -1]
+        [initialCellValue, initialCellValue, initialCellValue],
+        [initialCellValue, initialCellValue, initialCellValue],
+        [initialCellValue, initialCellValue, initialCellValue]
     ];
     return state;
 
@@ -36,7 +37,7 @@ function displayPlayer(state) {
     for (var i = 0; i > state.grid.length; i++);
     if (state.grid[i][i] === playerX) {
         $('.tile').text(playerX);
-    } else(console.log("do nothing"))
+    } else (console.log("do nothing"))
 }
 
 
@@ -133,8 +134,8 @@ function testHasWon() {
     var testState = {
         grid: [
             ["X", "X", "X"],
-            [-1, -1, -1],
-            [-1, -1, -1],
+            [initialCellValue, initialCellValue, initialCellValue],
+            [initialCellValue, initialCellValue, initialCellValue],
             {
                 currentPlayer: ""
             }
@@ -144,7 +145,7 @@ function testHasWon() {
     var won = hasWon(testState);
     assertEqual(won.status, true);
 
-    testState.grid[0] = [-1, -1, -1];
+    testState.grid[0] = [initialCellValue, initialCellValue, initialCellValue];
     testState.grid[1] = ["O", "O", "O"];
     won = hasWon(testState)
     assertEqual(won.status, true);
