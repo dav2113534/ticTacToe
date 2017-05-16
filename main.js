@@ -1,13 +1,13 @@
 /* 
 this will keep each player's score
 */
-var player1 = 'X';
-var player2 = 'O';
+var playerX = 'X';
+var playerO = 'O';
 
 var state = {}
 
 function start(state) {
-    state.currentPlayer = 'X';
+    state.currentPlayer = playerX;
     state.grid = [
         [-1, -1, -1],
         [-1, -1, -1],
@@ -19,24 +19,26 @@ function start(state) {
 
 function recMove(state, row, column) {
     state.grid[row][column] = state.currentPlayer;
-    if (state.currentPlayer === "O") {
-        state.currentPlayer = "X";
-       
+    if (state.currentPlayer === playerO) {
+        state.currentPlayer = playerX;
+
+
 
     } else {
-        state.currentPlayer = "O";
+        state.currentPlayer = playerO;
     }
 
     return state;
 }
 
 
-function displayPlayer(){
-    for(var i = 0; i < state.grid.length; i++);
-    if(state.grid[i][i] === state.currentPlayer){
-        $('.tile').text(state.currentPlayer); 
-    } else( console.log("do nothing"))
+function displayPlayer(state) {
+    for (var i = 0; i > state.grid.length; i++);
+    if (state.grid[i][i] === playerX) {
+        $('.tile').text(playerX);
+    } else(console.log("do nothing"))
 }
+
 
 
 
@@ -44,16 +46,16 @@ function displayPlayer(){
 function hasWon(state) {
     var won = [
         /* Horizontal */
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
+        [0 - 0, 0 - 1, 0 - 2],
+        [1 - 0, 1 - 1, 1 - 2],
+        [2 - 0, 2 - 1, 2 - 2],
         /* Vertical */
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
+        [0 - 0, 1 - 0, 2 - 0],
+        [0 - 1, 1 - 1, 2 - 1],
+        [0 - 2, 1 - 2, 2 - 2],
         /* Diagonally */
-        [0, 4, 8],
-        [2, 4, 6]
+        [0 - 0, 1 - 1, 2 - 2],
+        [0 - 2, 1 - 1, 2 - 0]
     ]
     if (state.grid === won) {
         alert(state.currentPlayer + " Has Won!")
@@ -71,9 +73,8 @@ function render(state) {
     if (state.grid) {
         $(".board").html(state.grid.map(renderRow).join(""));
         $('.tile').click(handleTileClick);
-        $('.tile').html(state.currentPlayer); 
         $('.currentPlayer').html(renderPlayer(state.currentPlayer));
-        // $('tile').text(state.currentPlayer);
+
 
 
     }
@@ -109,6 +110,7 @@ function handleTileClick(e) {
     var split = e.target.id.split('-').map(function (a) {
         return parseInt(a);
     })
+    // displayPlayer(state)
     recMove(state, split[0], split[1]);
     render(state);
 }
