@@ -22,9 +22,6 @@ function recMove(state, row, column) {
     state.grid[row][column] = state.currentPlayer;
     if (state.currentPlayer === playerO) {
         state.currentPlayer = playerX;
-
-
-
     } else {
         state.currentPlayer = playerO;
     }
@@ -85,7 +82,8 @@ function render(state) {
 }
 
 function renderCell(parentIndex, cell, index) {
-    return '<td id=' + parentIndex + '-' + index + ' class="tile"></td>'
+    if (cell === initialCellValue) cell = "";
+    return '<td id=' + parentIndex + '-' + index + ' class="tile">' + cell + '</td>'
 }
 
 function renderCellForRow(parentIndex) {
