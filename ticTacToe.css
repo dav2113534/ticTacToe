@@ -6,6 +6,9 @@ td {
     text-align: center;
     font-size: 72px;
 }
+.won {
+    background-color: red;
+}
 
 html {
     background-color: grey;
